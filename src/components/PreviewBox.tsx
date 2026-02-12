@@ -1,7 +1,8 @@
 import { Box, Typography } from '@mui/material';
+import { JSX } from 'react';
 
 type Props = {
-   svg: string | null;
+   svg: JSX.Element | null;
 };
 
 export function PreviewBox({ svg }: Props) {
@@ -19,15 +20,7 @@ export function PreviewBox({ svg }: Props) {
          }}
       >
          {svg ? (
-            <Box
-               dangerouslySetInnerHTML={{ __html: svg }}
-               sx={{
-                  '& svg': {
-                     width: '105%',
-                     height: '105%',
-                  },
-               }}
-            />
+            svg
          ) : (
             <Typography
                variant="body2"

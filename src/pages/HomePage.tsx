@@ -1,32 +1,32 @@
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { splitNumberToRunicValues, translateRunicValuesToLines } from '@/runes/numberToRune';
-import { composeRunicSvg } from '@/runes/composeRunicSvg';
-
 import AppLayout from '@/components/AppLayout';
 import { MainContainer } from '@/components/MainContainer';
 import { Header } from '@/components/Header';
 import { InputCard } from '@/components/InputCard';
 import { ResultCard } from '@/components/ResultCard';
+import { PreviewBox } from '@/components/PreviewBox';
+import { DownloadButton } from '@/components/DownloadButton';
+import composeRunicSvg from '@/runes/ComposeRunicSvg';
+import ReactDOMServer from 'react-dom/server';
 
 export default function HomePage() {
    const [number, setNumber] = useState<number | ''>('');
-   const [svgString, setSvgString] = useState<string | null>(null);
+   const [svgRune, setSvgRune] = useState<JSX.Element | null>(null);
 
    const handleGenerate = () => {
       if (number === '' || number <= 0 || number > 9999) return;
 
       const values = splitNumberToRunicValues(number);
-      console.log('-number', number);
       const lines = translateRunicValuesToLines(values);
-      console.log('-lines', lines);
       const svg = composeRunicSvg(lines);
 
-      setSvgString(svg);
+      setSvgRune(svg);
    };
 
    const handleDownload = () => {
-      if (!svgString) return;
-
+      if (!svgRune) return;
+      const svgString = ReactDOMServer.renderToStaticMarkup(svgRune);
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
 
@@ -47,7 +47,11 @@ export default function HomePage() {
                onChange={setNumber}
                onGenerate={handleGenerate}
             />
-            <ResultCard svg={svgString} onDownload={handleDownload} />
+            <ResultCard  >
+               <></>
+               <PreviewBox svg={svgRune} />
+               <DownloadButton onClick={handleDownload} disabled={!svgRune} />
+            </ResultCard >
          </MainContainer>
       </AppLayout>
    );

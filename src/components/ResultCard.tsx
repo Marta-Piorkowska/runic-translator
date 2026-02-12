@@ -1,14 +1,11 @@
 import { Box, Paper, Stack, Typography, } from '@mui/material';
-import { PreviewBox } from './PreviewBox';
-import { DownloadButton } from './DownloadButton';
 
 type Props = {
-   svg: string | null;
-   onDownload: () => void;
+   children: React.ReactNode;
 };
 
-export function ResultCard({ svg, onDownload }: Props) {
-   console.log('svg', svg);
+export function ResultCard({ children }: Props) {
+
    return (
       <Paper
          elevation={0}
@@ -53,8 +50,7 @@ export function ResultCard({ svg, onDownload }: Props) {
                   }}
                />
             </Box>
-            <PreviewBox svg={svg} />
-            <DownloadButton onClick={onDownload} disabled={!svg} />
+            {children}
          </Stack>
       </Paper>
    );
